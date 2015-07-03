@@ -1074,7 +1074,7 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
 
 static const int64 nTargetTimespan = 6 * 60 * 60; // 6 hours
 static const int64 nTargetSpacing = 10 * 60;
-static const int64 nMinSpacing = 180; 	// Absolute minimum spacing
+static const int64 nMinSpacing = 120; 	// Absolute minimum spacing
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
 static const int64 nTargetTimespanOld = 14 * 24 * 60 * 60; // two weeks
@@ -1107,7 +1107,7 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
 
 static int fork3Block = 27260; // FIXME move to top...
 static int fork4Block = 27680; // Acceptblock needs this
-static int fork5Block = 37860; // Acceptblock needs this
+static int fork5Block = 44200; // Acceptblock needs this
 
 unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock)
 {
