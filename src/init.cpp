@@ -620,11 +620,31 @@ bool AppInit2(boost::thread_group& threadGroup)
             nConnectTimeout = nNewTimeout;
     }
 
-    // Continue to put "/P2SH/" in the coinbase to monitor
-    // BIP16 support.
+    extern int64 nMinBlockTime;
+    if (mapArgs.count("-minblocktime"))
+    {
+        int nNewMin = GetArg("-minblocktime", 180);
+            if (nNewMin > 0 && nNewMin < 15*60){
+                nMinBlockTime = nNewMin;
+            InitWarning(strprintf(_("HARD minimum block time (nMinBlockTime) set to %d"), nMinBlockTime));
+        }
+    }
+
+    extern int nForkMinimum;
+    if (mapArgs.count("-forkminimum"))
+    {
+        int64_t nNewFork = GetArg("-forkminimum", 44260);
+            if (nNewFork > 0 && nNewFork < 999999){
+                nForkMinimum = nNewFork;
+            InitWarning(strprintf(_("Minimum block time fork block set to %d"), nForkMinimum));
+        }
+    }
+
+    // Put "/MIN/" in the coinbase to monitor
+    // minimum block time support. (like P2SH & BIP16 for bitcoin)
     // This can be removed eventually...
-    const char* pszP2SH = "/P2SH/";
-    COINBASE_FLAGS << std::vector<unsigned char>(pszP2SH, pszP2SH+strlen(pszP2SH));
+    const char* pszMIN = "/MIN/";
+    COINBASE_FLAGS << std::vector<unsigned char>(pszMIN, pszMIN+strlen(pszMIN));
 
     // Fee-per-kilobyte amount considered the same as "free"
     // If you are mining, be careful setting this:

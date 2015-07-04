@@ -1074,8 +1074,8 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
 
 static const int64 nTargetTimespan = 6 * 60 * 60; // 6 hours
 static const int64 nTargetSpacing = 10 * 60;
-static const int64 nMinSpacing = 120; 	// Absolute minimum spacing
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
+int64 nMinBlockTime = 180; 	// Absolute minimum spacing
 
 static const int64 nTargetTimespanOld = 14 * 24 * 60 * 60; // two weeks
 static const int64 nIntervalOld = nTargetTimespanOld / nTargetSpacing;
@@ -1107,7 +1107,7 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
 
 static int fork3Block = 27260; // FIXME move to top...
 static int fork4Block = 27680; // Acceptblock needs this
-static int fork5Block = 44200; // Acceptblock needs this
+int nForkMinimum = 44260; // Acceptblock needs this
 
 unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock)
 {
@@ -1266,10 +1266,10 @@ If New diff < 0, then set static value of 0.0001 or so.
 		nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime(); 	// Get last X blocks time
 		nActualTimespan = nActualTimespan / 8; 	// Calculate average for last 8 blocks
 		if(pindexLast->nHeight > fork4Block || fTestNet){
-			if (30 > nActualTimespan){ // was nMinSpacing
+			if (30 > nActualTimespan){ // was nMinBlockTime
 				printf("WARNING: SANITY CHECK FAILED: PID nActualTimespan %"PRI64d" too small! increased to %"PRI64d"\n",
-					nActualTimespan, nMinSpacing );
-				nActualTimespan = nMinSpacing;
+					nActualTimespan, nMinBlockTime );
+				nActualTimespan = nMinBlockTime;
 			}
 		}
 		bnNew.SetCompact(pindexLast->nBits);	// Get current difficulty
@@ -2327,8 +2327,8 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         if (nBits != GetNextWorkRequired(pindexPrev, this))
             return state.DoS(100, error("AcceptBlock(height=%d) : incorrect proof of work", nHeight));
 
-	if (nHeight > fork5Block){
-            if (GetBlockTime() <= (pindexPrev->GetBlockTime() + nMinSpacing))
+	if (nHeight > nForkMinimum){
+            if (GetBlockTime() <= (pindexPrev->GetBlockTime() + nMinBlockTime))
                 return state.Invalid(error("AcceptBlock(height=%d) : block's timestamp (%"PRI64d") is too soon after prev(%"PRI64d")", nHeight, GetBlockTime(), pindexPrev->GetBlockTime()));
 	} else if (nHeight > fork4Block){
             if (GetBlockTime() <= (pindexPrev->GetBlockTime() + 30))
