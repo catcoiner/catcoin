@@ -623,7 +623,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     extern int64 nMinBlockTime;
     if (mapArgs.count("-minblocktime"))
     {
-        int nNewMin = GetArg("-minblocktime", 180);
+        int nNewMin = GetArg("-minblocktime", 30);
             if (nNewMin > 0 && nNewMin < 15*60){
                 nMinBlockTime = nNewMin;
             InitWarning(strprintf(_("HARD minimum block time (nMinBlockTime) set to %d"), nMinBlockTime));

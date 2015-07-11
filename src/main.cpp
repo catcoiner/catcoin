@@ -1075,7 +1075,7 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
 static const int64 nTargetTimespan = 6 * 60 * 60; // 6 hours
 static const int64 nTargetSpacing = 10 * 60;
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
-int64 nMinBlockTime = 180; 	// Absolute minimum spacing
+int64 nMinBlockTime = 30; 	// Absolute minimum spacing
 
 static const int64 nTargetTimespanOld = 14 * 24 * 60 * 60; // two weeks
 static const int64 nIntervalOld = nTargetTimespanOld / nTargetSpacing;
