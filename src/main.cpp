@@ -3414,6 +3414,14 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             return false;
         }
 
+        if (pfrom->nVersion == 70003)
+        {
+            // Disconnect from 9.2 fork peers
+            printf("9.2 fork peer %s version %i detected; disconnecting\n", pfrom->addr.ToString().c_str(), pfrom->nVersion);
+            pfrom->fDisconnect = true;
+            return false;
+        }
+
         if (pfrom->nVersion == 10300)
             pfrom->nVersion = 300;
         if (!vRecv.empty())
